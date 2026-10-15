@@ -19,6 +19,19 @@ Deadline math, validation, and address rules for New York State (outside New Yor
 
 The official court PDFs are in `forms/` (see [forms/README.md](forms/README.md) for sources). Tests check that every field the engine fills still exists in each form, so a revised court form fails loudly instead of printing a blank line.
 
+## Known issues for attorney review
+
+These are open questions about legal behavior, not confirmed errors. Each one is how the engine works today and what a lawyer should confirm. Please don't "fix" them in a pull request without a cited source.
+
+1. **The 5-day notice names one month but states the total for all of them.** The court form has a single "month of" field, so the engine fills the first unpaid period there, while the total rent owed is the sum of every period. Confirm this is acceptable, or whether a separate 5-day notice is needed per month.
+2. **Good Cause form, exempt units (rent demand).** For an exempt unit the engine checks the exemption box in question 2 and leaves questions 3 and 4 blank (it checks 3A and 4E only for covered units). Question 4A reads "This unit is exempt from Article 6-A." Confirm whether 4A should be checked for exempt units.
+3. **Good Cause form, holdover petition.** The engine checks 4A only when the unit is exempt (it used to check it when the unit was covered, which contradicts the form's own text). For covered units it leaves question 4 blank, because a covered unit needs a specific reason from the list and the engine does not guess one. Confirm the right handling.
+4. **30/60/90-day period and lease term.** The engine chooses the period from how long the tenant has occupied the unit (RPL § 226-c). The form's wording for the 30, 60 and 90 day options also mentions the length of the lease term. The engine does not collect the lease term. Confirm whether it should.
+5. **Earliest move-out date.** The engine does not count the month the notice is served, starts counting on the first of the next month, adds 30/60/90 days, and rounds up to the last day of that month. Confirm this reading of the statute.
+6. **"Unit" label.** The address line always prints "Unit" before the apartment identifier, so a non-numbered unit prints as "Unit North Wing." Cosmetic, but it appears on a court form.
+
+Also worth knowing for maintainers: on the holdover petition the 30/60/90 choices are three separate one-button fields matched to their printed labels by position on the page (see `src/petition.ts`). If the court reissues that form, the tests that read those buttons back will fail and the mapping must be rechecked.
+
 ## Run the tests
 
 ```
