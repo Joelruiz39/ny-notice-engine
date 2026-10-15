@@ -1,0 +1,21 @@
+{
+  "name": "ny-notice-engine",
+  "version": "0.1.0",
+  "description": "Deadline math, validation and form logic for New York (outside NYC) landlord notices. Not legal advice.",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:ny": "TZ=America/New_York vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0",
+    "@types/node": "^22.0.0"
+  },
+  "dependencies": {
+    "@cantoo/pdf-lib": "^2.4.0"
+  }
+}
